@@ -1,0 +1,59 @@
+name:                sharesafe-client
+version:             0.1.0.0
+synopsis:            Client for ShareSafe: secret sharing and more.
+homepage:            https://github.com/primetype/sharesafe-client#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Nicolas Di Prima
+maintainer:          nicolas@primetype.co.uk
+copyright:           Prime Type Ltd
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.10
+extra-source-files:  README.md
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Prime.Client.Monad
+  build-depends:       foundation, base
+                     , sharesafe-lib
+                     , memory
+                     , mtl, transformers, exceptions
+                     , servant, servant-server, servant-client
+                     , http-client
+  default-language:    Haskell2010
+  ghc-options:         -Wall -fwarn-tabs
+  Default-Extensions:  NoImplicitPrelude
+                       MultiParamTypeClasses
+                       FlexibleContexts
+                       FlexibleInstances
+                       TypeFamilies
+
+
+executable sharesafe
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  build-depends:       foundation, base
+                     , sharesafe-lib
+                     , sharesafe-client
+  default-language:    Haskell2010
+  ghc-options:         -Wall -fwarn-tabs
+  Default-Extensions:  NoImplicitPrelude
+                       MultiParamTypeClasses
+                       FlexibleContexts
+                       FlexibleInstances
+                       TypeFamilies
+
+executable sharesafe-client-purescript-bridge
+  hs-source-dirs:      bridge
+  main-is:             Main.hs
+  build-depends:       foundation, base
+                     , sharesafe-lib
+                     , sharesafe-client
+  default-language:    Haskell2010
+  ghc-options:         -Wall -fwarn-tabs
+  Default-Extensions:  NoImplicitPrelude
+                       MultiParamTypeClasses
+                       FlexibleContexts
+                       FlexibleInstances
+                       TypeFamilies
