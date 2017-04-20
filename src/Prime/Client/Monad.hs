@@ -1,5 +1,6 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DataKinds #-}
 
 module Prime.Client.Monad
     ( App, runApp
@@ -32,9 +33,10 @@ import Control.Monad.Catch (MonadThrow)
 
 import Control.Concurrent (MVar, newMVar, modifyMVar)
 
-import Servant (ServantErr)
+import Servant (ServantErr, AuthProtect)
 import Servant.Client ( ClientEnv(..), BaseUrl(..), Scheme(..)
                       , ClientM, runClientM
+                      , AuthenticateReq
                       )
 import Network.HTTP.Client (newManager, defaultManagerSettings)
 
@@ -63,6 +65,7 @@ data State = State
     { getClientEnv    :: !ClientEnv
         -- ^ client environment for `servant-client` functions,
         -- calling `sharesafe-lib`'s client functions
+    , getSession :: !(Maybe (AuthenticateReq (AuthProtect "cookie-auth")))
     }
   deriving (Typeable)
 
@@ -118,7 +121,7 @@ mkConfig = liftIO $ do
                 defaultShareSafeAddress
                 defaultShareSafePort
                 defaultShareSafePath
-    st <- newMVar $ State { getClientEnv = cl }
+    st <- newMVar $ State { getClientEnv = cl, getSession = Nothing }
     return $ Config
       { getState         = st
       , shareSafeAddress = defaultShareSafeAddress
