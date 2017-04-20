@@ -33,6 +33,8 @@ import Control.Monad.Catch (MonadThrow)
 
 import Control.Concurrent (MVar, newMVar, modifyMVar)
 
+import Prime.Secret (MonadRandom(..))
+
 import Servant (ServantErr, AuthProtect)
 import Servant.Client ( ClientEnv(..), BaseUrl(..), Scheme(..)
                       , ClientM, runClientM
@@ -48,6 +50,8 @@ newtype App a = App
              , MonadThrow
              , MonadReader Config
              )
+instance MonadRandom App where
+    getRandomBytes = liftIO . getRandomBytes
 
 -- | This will be useful for converting the App to a servent server.
 --
